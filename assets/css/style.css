@@ -2057,8 +2057,9 @@ html.js-reveal-active .contact-card.is-revealed .reveal-contact-item:focus-withi
 /* ==========================================================================
    PUBLIC COMMENTS / GUESTBOOK SECTION
    ========================================================================== */
+.contact-card.comments-card,
 .comments-card {
-    margin-top: clamp(64px, 8vw, 96px);
+    margin-top: clamp(60px, 8vw, 90px) !important;
     background: var(--bg-card);
     border: 1px solid var(--neon-purple);
     border-radius: var(--radius-xl);
