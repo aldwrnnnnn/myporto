@@ -11,7 +11,7 @@ export const projectsData = {
         period: '2024 - 2025',
         role: 'Lead Fullstack Developer',
         status: 'Production Ready',
-        summary: 'Platform simulasi ujian interaktif Computer-Assisted Test (CAT) untuk persiapan seleksi Casis Polri (Akpol, Bintara, Tamtama). Dilengkapi bank soal terstruktur, timer otomatis, kalkulasi skor akurat, modul kolom kecermatan, dan perankingan nasional secara langsung.',
+        summary: 'Platform simulasi ujian interaktif Computer-Assisted Test (CAT) untuk persiapan seleksi Casis Polri, Sekdin, CPNS. Dilengkapi bank soal terstruktur, timer otomatis, kalkulasi skor akurat, modul kolom kecermatan, dan perankingan nasional secara langsung.',
         thumbnail: 'assets/images/projects/catara/thumbnail.webp',
         tech_stack: ['Laravel 12', 'Tailwind CSS', 'Alpine.js', 'MySQL', 'Redis', 'Chart.js'],
         highlights: [
