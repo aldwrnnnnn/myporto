@@ -606,6 +606,55 @@
 
                     </div>
                 </div>
+
+                <!-- Public Comments / Guestbook Card -->
+                <div class="contact-card comments-card" id="comments-section">
+                    <div class="comments-grid">
+                        
+                        <!-- Form Left Column -->
+                        <div class="comments-form-col">
+                            <div class="section-head reveal-comment-item" style="margin-bottom:0;">
+                                <span class="section-category">Komentar &amp; Salam</span>
+                                <h2 class="section-title">Guestbook</h2>
+                            </div>
+
+                            <form id="comment-form" class="comments-form" novalidate>
+                                <div class="form-group reveal-comment-item">
+                                    <label for="comment-name" class="form-label">Nama Anda</label>
+                                    <input type="text" id="comment-name" class="form-input" placeholder="Misal: Warren Buffett" maxlength="50" required autocomplete="name">
+                                    <span class="form-error">Nama wajib diisi minimal 2 karakter.</span>
+                                </div>
+
+                                <div class="form-group reveal-comment-item">
+                                    <label for="comment-text" class="form-label">Komentar</label>
+                                    <textarea id="comment-text" class="form-textarea" placeholder="Tuliskan komentar atau pesan Anda di sini..." rows="4" maxlength="500" required></textarea>
+                                    <span class="form-error">Komentar wajib diisi minimal 3 karakter.</span>
+                                </div>
+
+                                <button type="submit" id="comment-submit-btn" class="btn-primary reveal-comment-item" style="align-self:flex-start; padding:12px 28px; border-radius:var(--radius-md);">
+                                    <span>Kirim Komentar</span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Comments Feed Right Column -->
+                        <div class="comments-feed-col">
+                            <div class="comments-feed-header reveal-comment-item">
+                                <span class="feed-category-spacer" aria-hidden="true">&nbsp;</span>
+                                <h3 class="feed-header-title">Komentar Pengunjung</h3>
+                            </div>
+
+                            <div id="comments-list" class="comments-list reveal-comment-item" role="region" aria-live="polite" aria-label="Daftar Komentar">
+                                <!-- Dynamic comments inserted here via JS: loading / empty / list -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -624,6 +673,6 @@
         </div>
     </footer>
 
-    <script type="module" src="assets/js/app.js?v=44"></script>
+    <script type="module" src="assets/js/app.js?v=46"></script>
 </body>
 </html>

@@ -18,6 +18,7 @@ function initApp() {
     initLanyardCard();
     initAudioToggle();
     initContactForm();
+    initCommentsSection();
     initCopyButtons();
     
     // Page-specific initialization
@@ -1273,6 +1274,296 @@ function initContactForm() {
 }
 
 /* ==========================================================================
+   8B. PUBLIC COMMENTS & GUESTBOOK
+   ========================================================================== */
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+let isCommentsAttached = false;
+let currentComments = [];
+
+async function fetchCommentsFromServer() {
+    // Try PHP endpoint first (Laragon/Apache environment)
+    try {
+        const resp = await fetch('api/comments.php', { cache: 'no-cache' });
+        if (resp.ok) {
+            const data = await resp.json();
+            if (data && data.success && Array.isArray(data.comments)) {
+                return data.comments;
+            }
+        }
+    } catch (e) {
+        // Fallback to Vercel
+    }
+
+    // Try Vercel Serverless Function
+    try {
+        const respVercel = await fetch('/api/comments', { cache: 'no-cache' });
+        if (respVercel.ok) {
+            const data = await respVercel.json();
+            if (data && data.success && Array.isArray(data.comments)) {
+                return data.comments;
+            }
+        }
+    } catch (e) {
+        // Fallback to localStorage
+    }
+
+    // Fallback to localStorage
+    try {
+        const saved = localStorage.getItem('myporto_comments');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed)) return parsed;
+        }
+    } catch (e) {
+        // Ignore JSON error
+    }
+
+    return [];
+}
+
+async function postCommentToServer(name, comment) {
+    const payload = JSON.stringify({ name, comment });
+
+    // Try PHP endpoint first
+    try {
+        const resp = await fetch('api/comments.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload
+        });
+        if (resp.ok) {
+            const data = await resp.json();
+            if (data && data.success) {
+                return data;
+            }
+        }
+    } catch (e) {
+        // Fallback to Vercel
+    }
+
+    // Try Vercel serverless function
+    try {
+        const respVercel = await fetch('/api/comments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload
+        });
+        if (respVercel.ok) {
+            const data = await respVercel.json();
+            if (data && data.success) {
+                return data;
+            }
+        }
+    } catch (e) {
+        // Local fallback
+    }
+
+    // Local fallback when offline or static hosting
+    const now = new Date();
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    const formattedDate = `${now.getDate()} ${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+    const localComment = {
+        id: 'cmt_' + Date.now().toString(36),
+        name: name,
+        comment: comment,
+        created_at: now.toISOString(),
+        formatted_date: formattedDate
+    };
+
+    let localList = [];
+    try {
+        const saved = localStorage.getItem('myporto_comments');
+        if (saved) localList = JSON.parse(saved) || [];
+    } catch (e) {}
+
+    localList.unshift(localComment);
+    if (localList.length > 200) localList = localList.slice(0, 200);
+    localStorage.setItem('myporto_comments', JSON.stringify(localList));
+
+    return {
+        success: true,
+        message: 'Komentar berhasil disimpan!',
+        comment: localComment,
+        comments: localList
+    };
+}
+
+function renderCommentsList(comments) {
+    const listContainer = document.getElementById('comments-list');
+    const badge = document.getElementById('comments-count-badge');
+    if (!listContainer) return;
+
+    currentComments = Array.isArray(comments) ? comments : [];
+
+    if (badge) {
+        badge.textContent = String(currentComments.length);
+    }
+
+    if (currentComments.length === 0) {
+        listContainer.innerHTML = `
+            <div class="comments-empty-state">
+                <svg class="comments-empty-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <div class="comments-empty-title">Belum Ada Komentar</div>
+                <div class="comments-empty-desc">Jadilah yang pertama meninggalkan pesan atau salam di sini!</div>
+            </div>
+        `;
+        return;
+    }
+
+    listContainer.innerHTML = currentComments.map(cmt => {
+        const initial = (cmt.name || '?').trim().charAt(0).toUpperCase() || '?';
+        const author = escapeHTML(cmt.name || 'Anonim');
+        let rawDate = (cmt.formatted_date || '').trim();
+        if (rawDate.includes(',')) {
+            rawDate = rawDate.split(',')[0].trim();
+        }
+        const dateStr = escapeHTML(rawDate || 'Baru saja');
+        const msg = escapeHTML(cmt.comment || '');
+
+        return `
+            <article class="comment-card-item" data-id="${escapeHTML(cmt.id || '')}">
+                <div class="comment-avatar" aria-hidden="true">${initial}</div>
+                <div class="comment-content">
+                    <div class="comment-meta">
+                        <span class="comment-author-name">${author}</span>
+                        <time class="comment-time">${dateStr}</time>
+                    </div>
+                    <div class="comment-message">${msg}</div>
+                </div>
+            </article>
+        `;
+    }).join('');
+}
+
+export function initCommentsSection() {
+    const form = document.getElementById('comment-form');
+    const listContainer = document.getElementById('comments-list');
+
+    if (!form && !listContainer) return;
+
+    // Initial load
+    if (listContainer) {
+        if (!listContainer.hasChildNodes() || listContainer.children.length === 0) {
+            listContainer.innerHTML = `
+                <div class="comments-loading-state">
+                    <div class="comments-spinner" aria-hidden="true"></div>
+                    <span>Memuat komentar...</span>
+                </div>
+            `;
+        }
+
+        fetchCommentsFromServer().then(comments => {
+            renderCommentsList(comments);
+            try {
+                localStorage.setItem('myporto_comments', JSON.stringify(comments));
+            } catch (e) {}
+        }).catch(() => {
+            listContainer.innerHTML = `
+                <div class="comments-error-state">
+                    <span>Gagal memuat komentar.</span>
+                    <button type="button" class="comments-retry-btn" id="comments-retry-btn">Coba Lagi</button>
+                </div>
+            `;
+            const retryBtn = document.getElementById('comments-retry-btn');
+            if (retryBtn) {
+                retryBtn.addEventListener('click', () => initCommentsSection());
+            }
+        });
+    }
+
+    // Attach listeners once
+    if (isCommentsAttached) return;
+    isCommentsAttached = true;
+
+    // Submit listener via event delegation on document
+    document.addEventListener('submit', async (e) => {
+        const activeForm = e.target.closest('#comment-form');
+        if (!activeForm) return;
+        e.preventDefault();
+
+        const nameInput = document.getElementById('comment-name');
+        const textInput = document.getElementById('comment-text');
+        const submitBtn = document.getElementById('comment-submit-btn');
+        if (!nameInput || !textInput || !submitBtn) return;
+
+        let isValid = true;
+
+        // Reset errors
+        activeForm.querySelectorAll('.form-group').forEach(fg => fg.classList.remove('has-error'));
+
+        // Validate name (2 - 50 chars)
+        const nameVal = nameInput.value.trim();
+        if (nameVal.length < 2 || nameVal.length > 50) {
+            nameInput.closest('.form-group')?.classList.add('has-error');
+            isValid = false;
+        }
+
+        // Validate comment (3 - 500 chars)
+        const textVal = textInput.value.trim();
+        if (textVal.length < 3 || textVal.length > 500) {
+            textInput.closest('.form-group')?.classList.add('has-error');
+            isValid = false;
+        }
+
+        if (!isValid) return;
+
+        // Loading state on button
+        const originalBtnHTML = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 0.8s linear infinite;" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+                <path d="M12 2a10 10 0 0 1 10 10"></path>
+            </svg>
+            <span>Mengirim...</span>
+        `;
+
+        try {
+            const res = await postCommentToServer(nameVal, textVal);
+            if (res && res.success) {
+                showToast(res.message || 'Komentar berhasil dikirim!', 'purple');
+                activeForm.reset();
+
+                if (Array.isArray(res.comments)) {
+                    renderCommentsList(res.comments);
+                    try {
+                        localStorage.setItem('myporto_comments', JSON.stringify(res.comments));
+                    } catch (e) {}
+                } else {
+                    const freshComments = await fetchCommentsFromServer();
+                    renderCommentsList(freshComments);
+                }
+
+                // Scroll to top of comments list smoothly
+                const commentsListEl = document.getElementById('comments-list');
+                if (commentsListEl) {
+                    commentsListEl.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } else {
+                showToast(res?.error || 'Gagal mengirim komentar.', 'purple');
+            }
+        } catch (err) {
+            console.error('Submit comment error:', err);
+            showToast('Terjadi kesalahan saat mengirim komentar.', 'purple');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHTML;
+        }
+    });
+}
+
+/* ==========================================================================
    9. COPY TO CLIPBOARD BUTTONS
    ========================================================================== */
 let isCopyButtonsAttached = false;
@@ -1630,6 +1921,7 @@ async function navigateToPage(targetUrl, pushState = true) {
             initNavbarScroll();
             initLanyardCard();
             initContactForm();
+            initCommentsSection();
             initScrollAndEntranceAnimations();
             setTimeout(revealHeroAndNavbar, 60);
 
@@ -1694,9 +1986,9 @@ export function initScrollAndEntranceAnimations() {
     const skillsCol = document.querySelector('.skills-column');
     const projectsHead = document.querySelector('#projects .section-head');
     const projectsGrid = document.getElementById('projects-grid-container');
-    const contactCard = document.querySelector('.contact-card');
+    const contactCards = document.querySelectorAll('.contact-card');
 
-    if (!bioText && !skillsCol && !projectsHead && !projectsGrid && !contactCard) return;
+    if (!bioText && !skillsCol && !projectsHead && !projectsGrid && contactCards.length === 0) return;
 
     if ('IntersectionObserver' in window) {
         if (scrollObserverInstance) {
@@ -1728,16 +2020,18 @@ export function initScrollAndEntranceAnimations() {
         if (projectsGrid && !projectsGrid.classList.contains('is-revealed')) {
             scrollObserverInstance.observe(projectsGrid);
         }
-        if (contactCard && !contactCard.classList.contains('is-revealed')) {
-            scrollObserverInstance.observe(contactCard);
-        }
+        contactCards.forEach(card => {
+            if (!card.classList.contains('is-revealed')) {
+                scrollObserverInstance.observe(card);
+            }
+        });
     } else {
         // Fallback for older browsers
         if (bioText) bioText.classList.add('is-revealed');
         if (skillsCol) skillsCol.classList.add('is-revealed');
         if (projectsHead) projectsHead.classList.add('is-revealed');
         if (projectsGrid) projectsGrid.classList.add('is-revealed');
-        if (contactCard) contactCard.classList.add('is-revealed');
+        contactCards.forEach(card => card.classList.add('is-revealed'));
     }
 
     // Check if welcome loader is active
