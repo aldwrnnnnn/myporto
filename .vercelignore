@@ -1,0 +1,3 @@
+# Ignore PHP backend files on Vercel
+api-php/
+*.php

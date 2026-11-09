@@ -1290,17 +1290,23 @@ let isCommentsAttached = false;
 let currentComments = [];
 
 async function fetchCommentsFromServer() {
-    // Try PHP endpoint first (Laragon/Apache environment)
-    try {
-        const resp = await fetch('api/comments.php', { cache: 'no-cache' });
-        if (resp.ok) {
-            const data = await resp.json();
-            if (data && data.success && Array.isArray(data.comments)) {
-                return data.comments;
+    const isLocal = window.location.hostname === 'localhost' || 
+                    window.location.hostname === '127.0.0.1' || 
+                    window.location.hostname.endsWith('.test');
+
+    // On local environment, try PHP endpoint first (Laragon/Apache)
+    if (isLocal) {
+        try {
+            const resp = await fetch('api-php/comments.php', { cache: 'no-cache' });
+            if (resp.ok) {
+                const data = await resp.json();
+                if (data && data.success && Array.isArray(data.comments)) {
+                    return data.comments;
+                }
             }
+        } catch (e) {
+            // Fallback to Vercel/localStorage
         }
-    } catch (e) {
-        // Fallback to Vercel
     }
 
     // Try Vercel Serverless Function
@@ -1332,22 +1338,27 @@ async function fetchCommentsFromServer() {
 
 async function postCommentToServer(name, comment) {
     const payload = JSON.stringify({ name, comment });
+    const isLocal = window.location.hostname === 'localhost' || 
+                    window.location.hostname === '127.0.0.1' || 
+                    window.location.hostname.endsWith('.test');
 
-    // Try PHP endpoint first
-    try {
-        const resp = await fetch('api/comments.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: payload
-        });
-        if (resp.ok) {
-            const data = await resp.json();
-            if (data && data.success) {
-                return data;
+    // On local environment, try PHP endpoint first
+    if (isLocal) {
+        try {
+            const resp = await fetch('api-php/comments.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: payload
+            });
+            if (resp.ok) {
+                const data = await resp.json();
+                if (data && data.success) {
+                    return data;
+                }
             }
+        } catch (e) {
+            // Fallback to Vercel/localStorage
         }
-    } catch (e) {
-        // Fallback to Vercel
     }
 
     // Try Vercel serverless function
