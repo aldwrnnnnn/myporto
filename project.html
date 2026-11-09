@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Projek & Screenshot | ALDI</title>
+    <meta name="description" content="Detail arsitektur dan dokumentasi galeri screenshot projek pilihan ALDI.">
+    <meta name="author" content="ALDI">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Detail Projek & Screenshot | ALDI">
+    <meta property="og:description" content="Detail arsitektur dan dokumentasi galeri screenshot projek pilihan ALDI.">
+    <meta property="og:image" content="assets/images/og.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Detail Projek & Screenshot | ALDI">
+    <meta name="twitter:description" content="Detail arsitektur dan dokumentasi galeri screenshot projek pilihan ALDI.">
+    <meta name="twitter:image" content="assets/images/og.jpg">
+
+    <!-- Google Fonts Preconnect & Stylesheet -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/style.css?v=44">
+</head>
+<body>
+
+    <!-- Desktop Custom Neon Cursor -->
+    <div class="custom-cursor-dot"></div>
+    <div class="custom-cursor-ring"></div>
+
+    <!-- Procedural Electric Lightning Background Canvas -->
+    <canvas id="lightning-canvas"></canvas>
+
+    <!-- Contained Ambient Neon Atmosphere -->
+    <div class="ambient-glows">
+        <div class="ambient-glow-purple-1"></div>
+        <div class="ambient-glow-purple-2"></div>
+        <div class="ambient-glow-purple-3"></div>
+        <div class="grid-matrix"></div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Background Music Audio Element -->
+    <audio id="bg-music" src="assets/backsound/good-for-you.mp3?v=18" preload="auto" loop></audio>
+
+    <main id="project-detail-container" class="container project-split-page">
+        
+        <!-- =================================================================
+             LEFT COLUMN: DESKRIPSI TEKS & INFORMASI SISTEM
+             ================================================================= -->
+        <div class="project-left-col">
+            
+            <div class="project-top-bar">
+                <a data-href="index.html#projects" class="back-link" role="link" tabindex="0">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>Kembali ke Beranda Portofolio</span>
+                </a>
+            </div>
+
+            <h1 id="project-detail-title" class="project-headline">
+                Judul Projek
+            </h1>
+
+            <p id="project-detail-summary" class="project-summary-text">
+                Ringkasan teknis projek...
+            </p>
+
+            <!-- Project Architecture Highlights -->
+            <div class="project-highlights-box" id="project-highlights-container">
+                <!-- Injected via JavaScript -->
+            </div>
+        </div>
+
+        <!-- =================================================================
+             RIGHT COLUMN: GAMBAR BERTUMPUK & TECH STACK DI BAWAHNYA
+             ================================================================= -->
+        <div class="project-right-col">
+            <div class="stacked-deck-wrap" id="stacked-deck-wrap" title="Klik untuk foto berikutnya">
+                <div id="stacked-images-deck" class="stacked-images-deck" role="region" aria-label="Tumpukan Foto Screenshot Projek">
+                    <!-- Injected via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Deck Controls Bar for Quick Lightbox Access on Mobile & Desktop -->
+            <div class="deck-controls-bar">
+                <span class="deck-hint">Ketuk foto untuk berganti</span>
+                <button type="button" id="deck-fullscreen-btn" class="deck-fullscreen-btn" title="Buka Layar Penuh (Resolusi Penuh)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <polyline points="9 21 3 21 3 15"></polyline>
+                        <line x1="21" y1="3" x2="14" y2="10"></line>
+                        <line x1="3" y1="21" x2="10" y2="14"></line>
+                    </svg>
+                    <span>Buka Layar Penuh</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Lightbox Modal Component -->
+    <div id="lightbox-modal" class="lightbox-modal" role="dialog" aria-modal="true" aria-label="Pratinjau Screenshot">
+        <button id="lightbox-close" class="lightbox-close-btn" type="button" title="Tutup (Esc)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+
+        <button id="lightbox-prev" class="lightbox-nav-btn lightbox-prev" type="button" title="Foto Sebelumnya (Panah Kiri)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="Screenshot Projek" class="lightbox-img">
+        </div>
+
+        <button id="lightbox-next" class="lightbox-nav-btn lightbox-next" type="button" title="Foto Berikutnya (Panah Kanan)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+    </div>
+
+    <script type="module" src="assets/js/app.js?v=44"></script>
+</body>
+</html>

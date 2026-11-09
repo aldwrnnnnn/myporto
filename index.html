@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALDI | Full Stack Developer</title>
+    <meta name="description" content="Portofolio resmi ALDI, Full Stack Developer. Menampilkan karya backend Laravel, arsitektur REST API, dan antarmuka web modern nan responsif.">
+    <meta name="author" content="ALDI">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+
+    <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ALDI | Full Stack Developer">
+    <meta property="og:description" content="Portofolio resmi ALDI, Full Stack Developer. Menampilkan karya backend Laravel, arsitektur REST API, dan antarmuka web modern nan responsif.">
+    <meta property="og:image" content="assets/images/og.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ALDI | Full Stack Developer">
+    <meta name="twitter:description" content="Portofolio resmi ALDI, Full Stack Developer. Menampilkan karya backend Laravel, arsitektur REST API, dan antarmuka web modern nan responsif.">
+    <meta name="twitter:image" content="assets/images/og.jpg">
+
+    <!-- Google Fonts Preconnect & Stylesheet -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/style.css?v=44">
+</head>
+<body class="welcome-lock">
+
+    <!-- Welcome loader pop-up (Greeting, Name, and 0-100% Loading Animation) -->
+    <div id="welcome-loader-backdrop" class="welcome-loader-backdrop" role="dialog" aria-modal="true" aria-labelledby="welcome-loader-title">
+        <div class="welcome-curtain welcome-curtain-top"></div>
+        <div class="welcome-curtain welcome-curtain-bottom"></div>
+
+        <div id="welcome-loader-popup" class="welcome-loader-popup">
+            <span class="cyber-corner tl" aria-hidden="true"></span>
+            <span class="cyber-corner tr" aria-hidden="true"></span>
+            <span class="cyber-corner bl" aria-hidden="true"></span>
+            <span class="cyber-corner br" aria-hidden="true"></span>
+
+            <div class="welcome-greeting-box">
+                <p class="welcome-eyebrow">HOLA !</p>
+                <h2 id="welcome-loader-title" class="welcome-headline">WELCOME TO MY PORTFOLIO</h2>
+            </div>
+
+            <div class="welcome-bar-section">
+                <div class="welcome-bar-header">
+                    <span class="welcome-bar-label">LOADING</span>
+                    <div class="welcome-pct-wrap">
+                        <span id="welcome-counter-num" class="welcome-counter-num">0</span>
+                        <span class="welcome-counter-pct">%</span>
+                    </div>
+                </div>
+                <div class="welcome-bar-track">
+                    <div id="welcome-bar-fill" class="welcome-bar-fill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Custom Neon Cursor -->
+    <div class="custom-cursor-dot"></div>
+    <div class="custom-cursor-ring"></div>
+
+    <!-- Procedural Electric Lightning Background Canvas -->
+    <canvas id="lightning-canvas"></canvas>
+
+    <!-- Contained Ambient Neon Atmosphere -->
+    <div class="ambient-glows">
+        <div class="ambient-glow-purple-1"></div>
+        <div class="ambient-glow-purple-2"></div>
+        <div class="ambient-glow-purple-3"></div>
+        <div class="grid-matrix"></div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Background Music Audio Element -->
+    <audio id="bg-music" src="assets/backsound/good-for-you.mp3?v=18" preload="auto" loop></audio>
+
+    <!-- Floating Navigation Bar -->
+    <header class="site-header reveal-nav">
+        <div class="nav-wrapper">
+            <nav id="site-nav">
+                <ul class="nav-links" id="nav-links">
+                    <li><a data-href="#home" class="nav-link active" role="link" tabindex="0">Beranda</a></li>
+                    <li><a data-href="#bio" class="nav-link" role="link" tabindex="0">Bio</a></li>
+                    <li><a data-href="#projects" class="nav-link" role="link" tabindex="0">Projek</a></li>
+                    <li><a data-href="#contact" class="nav-link" role="link" tabindex="0">Kontak</a></li>
+                    <li>
+                        <button id="navbar-audio-btn" class="nav-audio-btn audio-btn" aria-label="Putar Musik Backsound" title="Putar Musik">
+                            <span class="audio-icon-wrap" aria-hidden="true">
+                                <svg class="icon-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                <svg class="icon-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                    <rect x="6" y="4" width="4" height="16"></rect>
+                                    <rect x="14" y="4" width="4" height="16"></rect>
+                                </svg>
+                            </span>
+                            <span class="audio-btn-label">Musik</span>
+                            <span class="eq-bars" aria-hidden="true">
+                                <span class="eq-bar"></span>
+                                <span class="eq-bar"></span>
+                                <span class="eq-bar"></span>
+                            </span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero section with interactive developer photo and campus card -->
+        <section id="home" class="hero-section">
+            <div class="container">
+                <div class="hero-grid">
+                    
+                    <!-- Left: Intro & Headline -->
+                    <div class="hero-content">
+                        <div class="availability-pill reveal-hero-item">
+                            <span class="status-dot"></span>
+                            <span>Tersedia untuk Projek & Kontrak</span>
+                        </div>
+
+                        <div class="hero-typography reveal-hero-item">
+                            <h1 class="hero-title">
+                                Hi There! <br>
+                                <span class="name-highlight">I am Aldi</span>
+                            </h1>
+                            <p class="hero-role">Full Stack Developer</p>
+                        </div>
+
+                        <p class="hero-description reveal-hero-item">
+                            Suka mengubah alur kerja yang rumit jadi sistem web yang sederhana dan nyaman dipakai. Teknologi terbaik adalah yang bekerja mulus tanpa bikin penggunanya bingung. Aku merancang aplikasi web yang stabil dan siap menangani kebutuhan nyata.
+                        </p>
+
+                        <div class="hero-ctas reveal-hero-item">
+                            <a data-href="#projects" class="btn-primary" role="link" tabindex="0">
+                                <span>Lihat Portofolio Projek</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <polyline points="19 12 12 19 5 12"></polyline>
+                                </svg>
+                            </a>
+                            <a data-href="#contact" class="btn-secondary" role="link" tabindex="0">
+                                <span>Hubungi Saya</span>
+                            </a>
+                        </div>
+
+                        <div class="hero-socials reveal-hero-item">
+                            <span class="social-label">Tautan:</span>
+                            <a data-external-href="https://wa.me/6281529434240" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="WhatsApp" role="link" tabindex="0">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" />
+                                    <path d="M9 10a0.5 0.5 0 0 0 1 0v-1a0.5 0.5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a0.5 0.5 0 0 0 0 -1h-1a0.5 0.5 0 0 0 0 1" />
+                                </svg>
+                            </a>
+                            <a data-external-href="https://www.instagram.com/aldrwnnn_?srtk=djFzNzd3dWY5OTk3" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Instagram" role="link" tabindex="0">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8A4 4 0 0 1 16 11.37z"/>
+                                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                                </svg>
+                            </a>
+                            <button type="button" class="social-icon-btn" data-copy="gedealdiirawan@gmail.com" title="Salin Email">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Foto Tuan Muda Aldi dengan Lanyard & ID Case + Card Kampus -->
+                    <div class="hero-visuals">
+                        
+                        <!-- 1. LANYARD & ID BADGE CASE (3:4 RATIO, PHYSICS DRAG & SWING) -->
+                        <div class="hero-lanyard-stage reveal-hero-item" id="hero-lanyard-stage">
+                            <!-- Dynamic SVG Lanyard Straps Hanging from Top Edge of Web -->
+                            <svg class="lanyard-svg" id="lanyard-svg" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="lanyardStrapGradLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#0c0b18" />
+                                        <stop offset="25%" stop-color="#1e1533" />
+                                        <stop offset="50%" stop-color="#a855f7" />
+                                        <stop offset="75%" stop-color="#1e1533" />
+                                        <stop offset="100%" stop-color="#0c0b18" />
+                                    </linearGradient>
+                                    <linearGradient id="lanyardStrapGradRight" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#0c0b18" />
+                                        <stop offset="25%" stop-color="#1e1533" />
+                                        <stop offset="50%" stop-color="#a855f7" />
+                                        <stop offset="75%" stop-color="#1e1533" />
+                                        <stop offset="100%" stop-color="#0c0b18" />
+                                    </linearGradient>
+                                    <filter id="lanyardDropShadow" x="-30%" y="-30%" width="160%" height="160%">
+                                        <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="rgba(0, 0, 0, 0.65)" />
+                                    </filter>
+                                </defs>
+                                <!-- Shadow strap paths -->
+                                <path id="lanyard-shadow-left" class="lanyard-strap-shadow" d="" />
+                                <path id="lanyard-shadow-right" class="lanyard-strap-shadow" d="" />
+                                <!-- Main fabric strap paths -->
+                                <path id="lanyard-path-left" class="lanyard-strap-path lanyard-strap-left" d="" />
+                                <path id="lanyard-path-right" class="lanyard-strap-path lanyard-strap-right" d="" />
+                                <!-- Top ceiling anchor cap at web top edge -->
+                                <rect id="lanyard-top-bracket" class="lanyard-top-bracket" x="0" y="0" width="68" height="5" rx="2" style="display:none;" />
+                            </svg>
+
+                            <!-- Hanging ID Badge Case (Interactive Drag & Swing) -->
+                            <div class="badge-card-container" id="badge-card-container" role="region" aria-label="ID Card Aldi - Bisa Digerakkan dengan Menahan Kursor" tabindex="0">
+                                <!-- Metallic Hardware (Crimp & Hook) -->
+                                <div class="lanyard-hardware" aria-hidden="true">
+                                    <div class="lanyard-crimp-clamp">
+                                        <span class="crimp-line"></span>
+                                        <span class="crimp-line"></span>
+                                    </div>
+                                    <div class="lanyard-metal-ring"></div>
+                                    <div class="lanyard-snap-hook">
+                                        <div class="hook-shaft"></div>
+                                        <div class="hook-clasp-lever"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Badge Case (Card Holder) -->
+                                <div class="badge-case" id="badge-case">
+                                    <!-- Top Mount Slot -->
+                                    <div class="badge-slot-mount" aria-hidden="true">
+                                        <div class="badge-slot-hole"></div>
+                                    </div>
+
+                                    <!-- Inner ID Card Content -->
+                                    <div class="badge-inner-card">
+                                        <!-- 3:4 Aspect Ratio Photo Case -->
+                                        <div class="badge-photo-box">
+                                            <img 
+                                                src="assets/images/tuan_muda_aldi.png" 
+                                                alt="Foto Aldi - Tuan Muda Aldi" 
+                                                class="badge-photo-img" 
+                                                id="badge-photo-img"
+                                                loading="eager"
+                                                draggable="false"
+                                            />
+                                            <!-- Subtle Gloss Reflection -->
+                                            <div class="badge-photo-sheen" aria-hidden="true"></div>
+                                        </div>
+
+                                        <!-- Bottom Campus Identity Footer -->
+                                        <div class="badge-footer badge-campus-footer">
+                                            <img 
+                                                src="assets/images/logo-kampus.png" 
+                                                alt="Logo Institut Bisnis dan Teknologi Indonesia" 
+                                                class="badge-campus-logo"
+                                                loading="eager"
+                                            />
+                                            <div class="badge-campus-info">
+                                                <span class="badge-campus-name">Institut Bisnis dan Teknologi Indonesia</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Acrylic Case Plastic Glare -->
+                                    <div class="badge-acrylic-glare" aria-hidden="true"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Bio and tech stack section -->
+        <section id="bio" class="section-wrap">
+            <div class="container">
+                <div class="bio-grid">
+                    <div class="bio-text-block">
+                        <div class="bio-section-head reveal-bio-item">
+                            <span class="section-category">Bio & Keahlian</span>
+                            <h2 class="section-title">Mengenal Lebih Dekat</h2>
+                            <p class="section-subtitle">Membangun teknologi dengan rasa ingin tahu dan empati.</p>
+                        </div>
+
+                        <p class="bio-lead reveal-bio-item">
+                            Dimulai dari rasa penasaran, berkembang menjadi passion. Aku menciptakan produk web yang tidak hanya rapi secara visual, tapi juga memberi dampak nyata bagi yang menggunakannya.
+                        </p>
+                        <p class="bio-paragraph reveal-bio-item">
+                            Keseharianku berpusat pada perancangan arsitektur web berbasis Laravel dan teknologi web modern. Bagiku, kepuasan terbesar adalah ketika sistem yang kubangun, bisa berjalan stabil, cepat, dan mempermudah urusan orang lain.
+                        </p>
+                    </div>
+
+                    <!-- Skills Matrix -->
+                    <div class="skills-column">
+                        <div class="skills-column-head">
+                            <span class="skills-column-title">Teknologi Pilihan</span>
+                        </div>
+                        <div class="skills-grid">
+                            <div class="skill-item" title="Laravel">
+                                <div class="skill-icon-wrap">
+                                    <img src="assets/images/icons/laravel.svg" alt="Laravel" class="skill-icon" loading="lazy" />
+                                </div>
+                                <span class="skill-name">Laravel</span>
+                            </div>
+                            <div class="skill-item" title="PHP">
+                                <div class="skill-icon-wrap">
+                                    <img src="assets/images/icons/php.svg" alt="PHP" class="skill-icon" loading="lazy" />
+                                </div>
+                                <span class="skill-name">PHP</span>
+                            </div>
+                            <div class="skill-item" title="JavaScript">
+                                <div class="skill-icon-wrap">
+                                    <img src="assets/images/icons/javascript.svg" alt="JavaScript" class="skill-icon" loading="lazy" />
+                                </div>
+                                <span class="skill-name">JavaScript</span>
+                            </div>
+                            <div class="skill-item" title="Tailwind CSS">
+                                <div class="skill-icon-wrap">
+                                    <img src="assets/images/icons/tailwindcss.svg" alt="Tailwind CSS" class="skill-icon" loading="lazy" />
+                                </div>
+                                <span class="skill-name">Tailwind CSS</span>
+                            </div>
+                            <div class="skill-item" title="Vue.js">
+                                <div class="skill-icon-wrap">
+                                    <img src="assets/images/icons/vue.svg" alt="Vue.js" class="skill-icon" loading="lazy" />
+                                </div>
+                                <span class="skill-name">Vue.js</span>
+                            </div>
+                            <div class="skill-item" title="React">
+                                <div class="skill-icon-wrap">
+                                    <img src="assets/images/icons/react.svg" alt="React" class="skill-icon" loading="lazy" />
+                                </div>
+                                <span class="skill-name">React</span>
+                            </div>
+                            <div class="skill-item" title="Node JS">
+                                <div class="skill-icon-wrap">
+                                    <img src="assets/images/icons/nodejs.svg" alt="Node JS" class="skill-icon" loading="lazy" />
+                                </div>
+                                <span class="skill-name">Node JS</span>
+                            </div>
+                            <div class="skill-item" title="Bootstrap">
+                                <div class="skill-icon-wrap">
+                                    <img src="assets/images/icons/bootstrap.svg" alt="Bootstrap" class="skill-icon" loading="lazy" />
+                                </div>
+                                <span class="skill-name">Bootstrap</span>
+                            </div>
+                            <div class="skill-item" title="MySQL">
+                                <div class="skill-icon-wrap">
+                                    <img src="assets/images/icons/mysql.svg" alt="MySQL" class="skill-icon" loading="lazy" />
+                                </div>
+                                <span class="skill-name">MySQL</span>
+                            </div>
+                            <div class="skill-item" title="Flutter">
+                                <div class="skill-icon-wrap">
+                                    <img src="assets/images/icons/flutter.svg" alt="Flutter" class="skill-icon" loading="lazy" />
+                                </div>
+                                <span class="skill-name">Flutter</span>
+                            </div>
+                            <div class="skill-item" title="Redis">
+                                <div class="skill-icon-wrap">
+                                    <img src="assets/images/icons/redis.svg" alt="Redis" class="skill-icon" loading="lazy" />
+                                </div>
+                                <span class="skill-name">Redis</span>
+                            </div>
+                            <div class="skill-item" title="Docker">
+                                <div class="skill-icon-wrap">
+                                    <img src="assets/images/icons/docker.svg" alt="Docker" class="skill-icon" loading="lazy" />
+                                </div>
+                                <span class="skill-name">Docker</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured projects section -->
+        <section id="projects" class="section-wrap">
+            <div class="container">
+                <div class="section-head">
+                    <span class="section-category">Karya Pilihan</span>
+                    <h2 class="section-title">Portofolio Projek</h2>
+                    <p class="section-subtitle">Klik untuk membuka halaman detail dan melihat galeri screenshot</p>
+                </div>
+
+                <div id="projects-grid-container" class="projects-grid">
+                    <!-- 1. CATARA -->
+                    <a data-href="project.html?id=catara" class="project-card" role="link" tabindex="0">
+                        <div class="project-card-top">
+                            <div class="project-thumb-wrap">
+                                <img 
+                                    src="assets/images/projects/catara/thumbnail.webp" 
+                                    alt="CATARA: Computer Assisted Test Polri & ASN" 
+                                    class="project-thumb"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <h3 class="project-title">CATARA: Computer Assisted Test Polri & ASN</h3>
+                        </div>
+                    </a>
+
+                    <!-- 2. BALIHFILM -->
+                    <a data-href="project.html?id=balihfilm" class="project-card" role="link" tabindex="0">
+                        <div class="project-card-top">
+                            <div class="project-thumb-wrap">
+                                <img 
+                                    src="assets/images/projects/balihfilm/thumbnail.webp" 
+                                    alt="BalihFilm: Platform Tiket Bioskop Online & E-Tiket" 
+                                    class="project-thumb"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <h3 class="project-title">BalihFilm: Platform Tiket Bioskop Online & E-Tiket</h3>
+                        </div>
+                    </a>
+
+                    <!-- 3. ALDIGAMESTATION -->
+                    <a data-href="project.html?id=aldigamestation" class="project-card" role="link" tabindex="0">
+                        <div class="project-card-top">
+                            <div class="project-thumb-wrap">
+                                <img 
+                                    src="assets/images/projects/aldigamestation/thumbnail.webp" 
+                                    alt="AldiGameStation: Rental & Reservasi Playstation" 
+                                    class="project-thumb"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <h3 class="project-title">AldiGameStation: Rental & Reservasi Playstation</h3>
+                        </div>
+                    </a>
+
+                    <!-- 4. ATTENDANCE SYSTEM -->
+                    <a data-href="project.html?id=attendanceweb" class="project-card" role="link" tabindex="0">
+                        <div class="project-card-top">
+                            <div class="project-thumb-wrap">
+                                <img 
+                                    src="assets/images/projects/attendanceweb/thumbnail.webp" 
+                                    alt="Attendance System: Presensi & Logbook Berbasis Web" 
+                                    class="project-thumb"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <h3 class="project-title">Attendance System: Presensi & Logbook Berbasis Web</h3>
+                        </div>
+                    </a>
+
+                    <!-- 5. NGOPISAMAKAMU -->
+                    <a data-href="project.html?id=ngopisamakamu" class="project-card" role="link" tabindex="0">
+                        <div class="project-card-top">
+                            <div class="project-thumb-wrap">
+                                <img 
+                                    src="assets/images/projects/ngopisamakamu/thumbnail.webp" 
+                                    alt="NgopiSamaKamu: Website & Katalog Kafe Modern" 
+                                    class="project-thumb"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <h3 class="project-title">NgopiSamaKamu: Website & Katalog Kafe Modern</h3>
+                        </div>
+                    </a>
+
+                    <!-- 6. DISDUKCAPIL (PUSAKA) -->
+                    <a data-href="project.html?id=pusaka" class="project-card" role="link" tabindex="0">
+                        <div class="project-card-top">
+                            <div class="project-thumb-wrap">
+                                <img 
+                                    src="assets/images/projects/pusaka/thumbnail.webp" 
+                                    alt="Disdukcapil (PUSAKA): Pelayanan Kependudukan" 
+                                    class="project-thumb"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <h3 class="project-title">Disdukcapil (PUSAKA): Pelayanan Kependudukan</h3>
+                        </div>
+                    </a>
+
+                    <!-- 7. SMART ATTENDANCE MOBILE -->
+                    <a data-href="project.html?id=attendanceflutter" class="project-card" role="link" tabindex="0">
+                        <div class="project-card-top">
+                            <div class="project-thumb-wrap">
+                                <img 
+                                    src="assets/images/projects/attendanceflutter/thumbnail.webp" 
+                                    alt="Smart Attendance Mobile: Presensi Versi Mobile" 
+                                    class="project-thumb"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <h3 class="project-title">Smart Attendance Mobile: Presensi Versi Mobile</h3>
+                        </div>
+                    </a>
+
+                    <!-- 8. MONEY TRACKER -->
+                    <a data-href="project.html?id=moneytracker" class="project-card" role="link" tabindex="0">
+                        <div class="project-card-top">
+                            <div class="project-thumb-wrap">
+                                <img 
+                                    src="assets/images/projects/moneytracker/thumbnail.webp" 
+                                    alt="Money Tracker: Aplikasi Manajemen Keuangan Mahasiswa" 
+                                    class="project-thumb"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <h3 class="project-title">Money Tracker: Aplikasi Manajemen Keuangan Mahasiswa</h3>
+                        </div>
+                    </a>
+
+                    <!-- 9. ANTREAN DIGITAL -->
+                    <a data-href="project.html?id=antreandigital" class="project-card" role="link" tabindex="0">
+                        <div class="project-card-top">
+                            <div class="project-thumb-wrap">
+                                <img 
+                                    src="assets/images/projects/antreandigital/thumbnail.webp" 
+                                    alt="Antrean Digital: System Manajemen Antrean & Panggilan Loket" 
+                                    class="project-thumb"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <h3 class="project-title">Antrean Digital: System Manajemen Antrean & Panggilan Loket</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Direct contact section -->
+        <section id="contact" class="section-wrap">
+            <div class="container">
+                <div class="contact-card">
+                    <div class="contact-grid">
+                        
+                        <!-- Contact Info Left -->
+                        <div class="contact-info">
+                            <div class="section-head reveal-contact-item" style="margin-bottom:0;">
+                                <span class="section-category">Contact Me</span>
+                                <h2 class="section-title">Let's Talk</h2>
+                            </div>
+                            <p class="contact-lead reveal-contact-item">
+                                Mau bikin website baru, optimasi yang udah jalan, atau diskusi kolaborasi teknis? Langsung DM ajaa
+                            </p>
+
+                            <div class="contact-methods">
+                                <div class="contact-method-item reveal-contact-item">
+                                    <div>
+                                        <div class="method-label">Email Resmi</div>
+                                        <div class="method-value">gedealdiirawan@gmail.com</div>
+                                    </div>
+                                    <button type="button" class="copy-btn" data-copy="gedealdiirawan@gmail.com" title="Salin Email">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div class="contact-method-item reveal-contact-item">
+                                    <div>
+                                        <div class="method-label">WhatsApp Direct</div>
+                                        <div class="method-value">+62 815 2943 4240</div>
+                                    </div>
+                                    <button type="button" class="copy-btn" data-copy="+6281529434240" title="Salin Nomor WhatsApp">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Form Right -->
+                        <form id="contact-form" class="contact-form" novalidate>
+                            <div class="form-group reveal-contact-item">
+                                <label for="contact-name" class="form-label">Nama Anda</label>
+                                <input type="text" id="contact-name" class="form-input" placeholder="Misal: Warren Buffett" required>
+                                <span class="form-error">Nama wajib diisi minimal 2 karakter.</span>
+                            </div>
+
+                            <div class="form-group reveal-contact-item">
+                                <label for="contact-email" class="form-label">Alamat Email</label>
+                                <input type="email" id="contact-email" class="form-input" placeholder="nama@perusahaan.com" required>
+                                <span class="form-error">Format email tidak valid.</span>
+                            </div>
+
+                            <div class="form-group reveal-contact-item">
+                                <label for="contact-message" class="form-label">Pesan / Rencana Projek</label>
+                                <textarea id="contact-message" class="form-textarea" placeholder="Ceritakan kebutuhan sistem atau ide Anda..." required></textarea>
+                                <span class="form-error">Pesan wajib diisi minimal 5 karakter.</span>
+                            </div>
+
+                            <button type="submit" id="contact-submit-btn" class="btn-primary reveal-contact-item" style="align-self:flex-start; padding:12px 28px; border-radius:var(--radius-md);">
+                                <span>Kirim Pesan</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>ALDI &bull; Fullstack Software Engineer &bull; 2026</p>
+            <a data-href="#home" class="back-to-top" role="link" tabindex="0" style="margin-top:10px;">
+                <span>Kembali ke Atas</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                    <polyline points="5 12 12 5 19 12"></polyline>
+                </svg>
+            </a>
+        </div>
+    </footer>
+
+    <script type="module" src="assets/js/app.js?v=44"></script>
+</body>
+</html>
