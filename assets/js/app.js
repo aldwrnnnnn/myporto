@@ -4,7 +4,7 @@
  * Lightbox Gallery, Copy Actions, and Custom Neon Cursor.
  */
 
-import { projectsData } from './projects-data.js?v=25';
+import { projectsData } from './projects-data.js?v=26';
 import { initLightningEngine } from './lightning.js';
 
 function initApp() {
@@ -851,8 +851,8 @@ function renderProjectsGrid() {
    ========================================================================== */
 function initProjectDetailPage() {
     const urlParams = new URLSearchParams(window.location.search);
-    const slug = urlParams.get('id') || 'catara';
-    const project = projectsData[slug] || (slug === 'attendance-system' ? projectsData['attendanceweb'] : projectsData['catara']);
+    const slug = urlParams.get('id') || 'smartwastemanagement';
+    const project = projectsData[slug] || (slug === 'catara' ? projectsData['smartwastemanagement'] : (slug === 'attendance-system' ? projectsData['attendanceweb'] : projectsData['smartwastemanagement']));
     
     if (!project) return;
     

@@ -3,33 +3,29 @@
  * Berisi data asli projek yang dikerjakan beserta galeri screenshot.
  */
 export const projectsData = {
-    'catara': {
-        slug: 'catara',
-        title: 'CATARA: Computer Assisted Test Polri & ASN',
-        category: 'Aplikasi Web & Ujian Online',
-        badge: 'Sistem Unggulan',
-        period: '2024 - 2025',
-        role: 'Lead Fullstack Developer',
+    'smartwastemanagement': {
+        slug: 'smartwastemanagement',
+        title: 'Smart Waste Management: Klasifikasi Sampah & Pelaporan Berbasis AI',
+        category: 'Aplikasi Web & Kecerdasan Buatan (AI)',
+        badge: 'AI & Smart Civic',
+        period: '2025 - 2026',
+        role: 'Fullstack & AI Integration Developer',
         status: 'Production Ready',
-        summary: 'Platform simulasi ujian interaktif Computer-Assisted Test (CAT) untuk persiapan seleksi Casis Polri, Sekdin, CPNS. Dilengkapi bank soal terstruktur, timer otomatis, kalkulasi skor akurat, modul kolom kecermatan, dan perankingan nasional secara langsung.',
-        thumbnail: 'assets/images/projects/catara/thumbnail.webp',
-        tech_stack: ['Laravel 12', 'Tailwind CSS', 'Alpine.js', 'MySQL', 'Redis', 'Chart.js'],
+        summary: 'Sistem tata kelola dan pelaporan temuan sampah terpadu berbasis kecerdasan buatan. Memfasilitasi warga melaporkan tumpukan sampah dilengkapi geotagging GPS otomatis, deteksi jenis sampah (Organik, Plastik, Kertas) via microservice AI, serta pemantauan operasional armada kebersihan.',
+        thumbnail: 'assets/images/projects/smartwastemanagement/thumbnail.webp',
+        tech_stack: ['FastAPI', 'Python AI', 'Tailwind CSS', 'Alpine.js', 'MySQL', 'GPS Geolocation', 'Chart.js'],
         highlights: [
-            'Sistem ujian berbasis batas waktu dan acak soal otomatis',
-            'Modul latihan spesifik: TPA, Kecerdasan, Kepribadian, dan Tes Kecermatan',
-            'Dashboard analitik perkembangan nilai dan histori skor peserta',
-            'Panel admin untuk manajemen ribuan bank soal dan export laporan'
+            'Klasifikasi jenis sampah otomatis (Organik, Plastik, Kertas) via microservice FastAPI',
+            'Geotagging lokasi temuan sampah instan menggunakan koordinat GPS perangkat',
+            'Dashboard analitik operasional untuk pemantauan volume, kategori, dan status penanganan',
+            'Manajemen alur verifikasi dua peran: Warga Pelapor dan Administrator Sistem'
         ],
         screenshots: [
-            { url: 'assets/images/projects/catara/1.webp', title: 'Dashboard Utama & Simulasi CAT', description: 'Tampilan beranda dan ringkasan fitur utama platform simulasi ujian seleksi Polri.' },
-            { url: 'assets/images/projects/catara/2.webp', title: 'Bank Soal & Pengaturan Ujian', description: 'Visualisasi modul materi latihan, bank soal, dan evaluasi capaian belajar casis.' },
-            { url: 'assets/images/projects/catara/3.webp', title: 'Tampilan Lembar Ujian Tryout', description: 'Akses pengerjaan simulasi ujian yang nyaman langsung dari smartphone atau desktop.' },
-            { url: 'assets/images/projects/catara/4.webp', title: 'Perhitungan Skor & Peringkat Nasional', description: 'Evaluasi nilai yang langsung keluar saat ujian berakhir dengan ranking nasional.' },
-            { url: 'assets/images/projects/catara/5.webp', title: 'Modul Tes Kolom Kecermatan', description: 'Modul pengujian kecepatan dan ketelitian dengan batas waktu per kolom angka.' },
-            { url: 'assets/images/projects/catara/6.webp', title: 'Dashboard Evaluasi Casis', description: 'Statistik kekuatan dan kelemahan materi belajar casis secara visual.' },
-            { url: 'assets/images/projects/catara/7.webp', title: 'Analisis Statistik & Riwayat Ujian', description: 'Histori capaian nilai dari setiap sesi simulasi tryout yang telah dikerjakan.' },
-            { url: 'assets/images/projects/catara/8.webp', title: 'Panel Manajemen Soal Admin', description: 'Pengelolaan bank soal, kunci jawaban, dan pembahasan materi ujian terpadu.' },
-            { url: 'assets/images/projects/catara/9.webp', title: 'Laporan Hasil Ujian & Rekapitulasi', description: 'Rekapitulasi nilai peserta dalam format siap ekspor untuk evaluasi pembina.' }
+            { url: 'assets/images/projects/smartwastemanagement/1.webp', title: 'Portal Login & Akses Pengguna', description: 'Halaman autentikasi dua peran dengan akun demo instan untuk Administrator Sistem dan Warga Pelapor.' },
+            { url: 'assets/images/projects/smartwastemanagement/2.webp', title: 'Dashboard Operasional Administrator', description: 'Monitoring antrean laporan warga, visualisasi komposisi kategori sampah, dan distribusi status penanganan.' },
+            { url: 'assets/images/projects/smartwastemanagement/3.webp', title: 'Manajemen Seluruh Laporan Sampah', description: 'Tabel data laporan temuan sampah terpadu dengan filter status, skor keyakinan AI, dan koordinat GPS.' },
+            { url: 'assets/images/projects/smartwastemanagement/4.webp', title: 'Formulir Laporan Temuan Sampah & Geotagging', description: 'Antarmuka pelaporan warga dengan upload bukti foto, penentuan titik koordinat GPS otomatis, dan deskripsi lokasi.' },
+            { url: 'assets/images/projects/smartwastemanagement/5.webp', title: 'Deteksi Otomatis Kategori via AI (FastAPI)', description: 'Uji klasifikasi cerdas secara real-time mendeteksi jenis sampah dengan rincian probabilitas dan tingkat keyakinan.' }
         ],
         github_url: 'https://github.com',
         live_url: '#'
