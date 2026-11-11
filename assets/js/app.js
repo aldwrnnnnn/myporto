@@ -1418,6 +1418,11 @@ async function postCommentToServer(name, comment) {
             if (data && data.success) {
                 return data;
             }
+        } else {
+            const errData = await respVercel.json().catch(() => null);
+            if (errData && errData.error) {
+                return { success: false, error: errData.error };
+            }
         }
     } catch (e) {
         // Local fallback

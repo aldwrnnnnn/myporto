@@ -1,10 +1,10 @@
 /**
  * Vercel Serverless Function: /api/comments
- * Handles fetching and posting comments.
+ * Handles fetching and posting comments with persistent Supabase storage.
  */
 
-// Initial seed comments (migrated from local comments.json)
-let memoryComments = [
+// Initial seed comments (migrated from local comments.json / fallback if db not configured yet)
+const DEFAULT_SEED_COMMENTS = [
     {
         "id": "cmt_f6b165a75ceb",
         "name": "CEO PT LAGUNA",
@@ -49,21 +49,66 @@ let memoryComments = [
     }
 ];
 
+let memoryFallback = [...DEFAULT_SEED_COMMENTS];
+
 export default async function handler(req, res) {
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 
+    const supabaseUrl = process.env.SUPABASE_URL ? process.env.SUPABASE_URL.replace(/\/+$/, '') : null;
+    const supabaseKey = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const isSupabaseConfigured = Boolean(supabaseUrl && supabaseKey);
+
     if (req.method === 'GET') {
+        if (isSupabaseConfigured) {
+            try {
+                const endpoint = `${supabaseUrl}/rest/v1/comments?select=id,name,comment,created_at,formatted_date&order=created_at.desc&limit=200`;
+                const response = await fetch(endpoint, {
+                    headers: {
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (Array.isArray(data)) {
+                        return res.status(200).json({
+                            success: true,
+                            count: data.length,
+                            comments: data
+                        });
+                    }
+                } else {
+                    const errText = await response.text();
+                    console.error('Supabase GET comments failed:', response.status, errText);
+                }
+            } catch (err) {
+                console.error('Supabase fetch error:', err);
+            }
+        }
+
+        // Fallback if Supabase is not configured yet or temporary fetch failure
         return res.status(200).json({
             success: true,
-            count: memoryComments.length,
-            comments: memoryComments
+            count: memoryFallback.length,
+            comments: memoryFallback
         });
     }
 
     if (req.method === 'POST') {
-        const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+        let body = {};
+        try {
+            body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+        } catch (e) {
+            return res.status(400).json({
+                success: false,
+                error: 'Format data JSON tidak valid.'
+            });
+        }
+
         const rawName = (body.name || '').trim();
         const rawComment = (body.comment || '').trim();
 
@@ -92,7 +137,7 @@ export default async function handler(req, res) {
             });
         }
 
-        // Basic escape
+        // Basic HTML entity escape
         const cleanName = rawName
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
@@ -112,23 +157,78 @@ export default async function handler(req, res) {
         const formattedDate = `${now.getDate()} ${monthNames[now.getMonth()]} ${now.getFullYear()}`;
 
         const newComment = {
-            id: 'cmt_' + Math.random().toString(36).substring(2, 10),
+            id: 'cmt_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 6),
             name: cleanName,
             comment: cleanComment,
             created_at: now.toISOString(),
             formatted_date: formattedDate
         };
 
-        memoryComments.unshift(newComment);
-        if (memoryComments.length > 200) {
-            memoryComments = memoryComments.slice(0, 200);
+        if (isSupabaseConfigured) {
+            try {
+                const insertEndpoint = `${supabaseUrl}/rest/v1/comments`;
+                const insertResp = await fetch(insertEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(newComment)
+                });
+
+                if (insertResp.ok) {
+                    // Fetch latest comments to return fresh list
+                    const getEndpoint = `${supabaseUrl}/rest/v1/comments?select=id,name,comment,created_at,formatted_date&order=created_at.desc&limit=200`;
+                    const getResp = await fetch(getEndpoint, {
+                        headers: {
+                            'apikey': supabaseKey,
+                            'Authorization': `Bearer ${supabaseKey}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    let commentsList = [newComment];
+                    if (getResp.ok) {
+                        const fetched = await getResp.json();
+                        if (Array.isArray(fetched)) commentsList = fetched;
+                    }
+
+                    return res.status(200).json({
+                        success: true,
+                        message: 'Komentar berhasil dikirim!',
+                        comment: newComment,
+                        comments: commentsList
+                    });
+                } else {
+                    const errText = await insertResp.text();
+                    console.error('Supabase INSERT comments failed:', insertResp.status, errText);
+                    return res.status(500).json({
+                        success: false,
+                        error: 'Gagal menyimpan komentar ke database server.'
+                    });
+                }
+            } catch (err) {
+                console.error('Supabase insert network error:', err);
+                return res.status(500).json({
+                    success: false,
+                    error: 'Koneksi ke database bermasalah. Coba lagi beberapa saat lagi.'
+                });
+            }
+        }
+
+        // Memory fallback if Supabase not configured yet
+        memoryFallback.unshift(newComment);
+        if (memoryFallback.length > 200) {
+            memoryFallback = memoryFallback.slice(0, 200);
         }
 
         return res.status(200).json({
             success: true,
             message: 'Komentar berhasil dikirim!',
             comment: newComment,
-            comments: memoryComments
+            comments: memoryFallback
         });
     }
 
